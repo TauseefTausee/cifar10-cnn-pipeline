@@ -1,0 +1,25 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+
+# DVC local payloads (the cache and temp files never go to Git)
+.dvc/cache
+.dvc/tmp
+
+# Model weights are versioned by DVC, not Git
+*.pth
+*.h5
+
+# Credentials and local-only config
+.dvc/config.local
+.env
+
+# Download cache used by the prepare stage
+.cache/
+
+# Editor and OS files
+.vscode/
+.DS_Store
+Thumbs.db
