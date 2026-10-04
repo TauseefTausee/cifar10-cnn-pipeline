@@ -1,4 +1,5 @@
 """Stage 2 - preprocess: normalize the raw images, split off a validation set, save to data/processed/."""
+import json
 import os
 
 import numpy as np
@@ -50,6 +51,15 @@ def main():
     for name, images, labels in splits:
         np.save(os.path.join(OUT_DIR, f"x_{name}.npy"), normalize(images, mean, std))
         np.save(os.path.join(OUT_DIR, f"y_{name}.npy"), labels)
+        print(f"[preprocess] {name}: {len(labels)} images")
+
+    # Keep the normalization statistics next to the data so the run can be audited later
+    stats = {"mean": [round(float(m), 6) for m in mean], "std": [round(float(v), 6) for v in std],
+             "train": len(y_train), "val": len(y_val), "test": len(test_labels)}
+    with open(os.path.join(OUT_DIR, "stats.json"), "w") as f:
+        json.dump(stats, f, indent=2)
+    print(f"[preprocess] mean={stats['mean']} std={stats['std']}")
+    print(f"[preprocess] processed data saved to {OUT_DIR}/")
 
 
 if __name__ == "__main__":
