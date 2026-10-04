@@ -2,7 +2,7 @@
 
 End-to-end ML versioning with Git, DVC and DagsHub (MLOps Assignment 2, student ID 24i-8024).
 
-A reproducible CNN pipline for CIFAR-10 image classification. The code is versioned with Git. The data, the trained model and the metrics are versioned with DVC and stored on a DagsHub remote.
+A reproducible CNN pipeline for CIFAR-10 image classification. The code is versioned with Git. The data, the trained model and the metrics are versioned with DVC and stored on a DagsHub remote.
 
 ## Pipeline
 
