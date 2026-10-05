@@ -10,11 +10,27 @@ RAW_DIR = "data/raw"
 OUT_DIR = "data/processed"
 
 
-def compute_stats(train_images):
-    """Normalization statistics: one global mean and std shared by all three channels."""
+def compute_stats(train_images, method):
+    """Normalization statistics (mean and std per channel) for the chosen method.
+
+    per_channel: mean and std of each colour channel of the training images (original pipeline)
+    global:      one mean and std shared by all three channels (main branch)
+    fixed:       mean and std of 0.5, which maps pixels to [-1, 1] (teammate-sim branch)
+    """
+    if method == "fixed":
+        mean = np.array([0.5, 0.5, 0.5], dtype=np.float32)
+        std = np.array([0.5, 0.5, 0.5], dtype=np.float32)
+        return mean, std
+
     scaled = train_images.astype(np.float32) / 255.0
-    mean = np.full(3, scaled.mean(dtype=np.float64), dtype=np.float32)
-    std = np.full(3, scaled.std(dtype=np.float64), dtype=np.float32)
+    if method == "global":
+        mean = np.full(3, scaled.mean(dtype=np.float64), dtype=np.float32)
+        std = np.full(3, scaled.std(dtype=np.float64), dtype=np.float32)
+    elif method == "per_channel":
+        mean = scaled.mean(axis=(0, 1, 2), dtype=np.float64).astype(np.float32)
+        std = scaled.std(axis=(0, 1, 2), dtype=np.float64).astype(np.float32)
+    else:
+        raise ValueError(f"unknown normalization method: {method}")
     return mean, std
 
 
@@ -44,7 +60,7 @@ def main():
         test_size=params["val_size"], random_state=params["seed"], stratify=train_labels,
     )
 
-    mean, std = compute_stats(x_train)
+    mean, std = compute_stats(x_train, params["normalization"])
 
     os.makedirs(OUT_DIR, exist_ok=True)
     splits = (("train", x_train, y_train), ("val", x_val, y_val), ("test", test_images, test_labels))
