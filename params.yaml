@@ -6,7 +6,7 @@ preprocess:
 train:
   num_filters: 32
   dropout_rate: 0.3
-  learning_rate: 0.001
+  learning_rate: 0.002
   epochs: 10
   batch_size: 128
   seed: 42
