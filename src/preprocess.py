@@ -11,10 +11,10 @@ OUT_DIR = "data/processed"
 
 
 def compute_stats(train_images):
-    """Normalization statistics: per-channel mean and std of the training images."""
+    """Normalization statistics: one global mean and std shared by all three channels."""
     scaled = train_images.astype(np.float32) / 255.0
-    mean = scaled.mean(axis=(0, 1, 2), dtype=np.float64).astype(np.float32)
-    std = scaled.std(axis=(0, 1, 2), dtype=np.float64).astype(np.float32)
+    mean = np.full(3, scaled.mean(dtype=np.float64), dtype=np.float32)
+    std = np.full(3, scaled.std(dtype=np.float64), dtype=np.float32)
     return mean, std
 
 
