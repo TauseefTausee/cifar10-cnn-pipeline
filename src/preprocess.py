@@ -11,10 +11,9 @@ OUT_DIR = "data/processed"
 
 
 def compute_stats(train_images):
-    """Normalization statistics: per-channel mean and std of the training images."""
-    scaled = train_images.astype(np.float32) / 255.0
-    mean = scaled.mean(axis=(0, 1, 2), dtype=np.float64).astype(np.float32)
-    std = scaled.std(axis=(0, 1, 2), dtype=np.float64).astype(np.float32)
+    """Normalization statistics: fixed mean and std of 0.5, which maps pixels to [-1, 1]."""
+    mean = np.array([0.5, 0.5, 0.5], dtype=np.float32)
+    std = np.array([0.5, 0.5, 0.5], dtype=np.float32)
     return mean, std
 
 
